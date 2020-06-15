@@ -1,0 +1,172 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>MachZehnder</title><meta name="generator" content="MATLAB 9.7"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2020-06-15"><meta name="DC.source" content="MachZehnder.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">Deklarationen</a></li><li><a href="#3">Definitionen</a></li><li><a href="#4">Wellenfunktionen</a></li><li><a href="#5">Intensit&auml;ten</a></li><li><a href="#6">Plotten der Intensit&auml;t f&uuml;r unterschiedliche n</a></li><li><a href="#7">Plotten der EM-Wellen</a></li></ul></div><pre class="codeinput"><span class="comment">%{
+</span><span class="comment">    Nikita Vetter - MachZehnder Interferometer (Modell)
+</span><span class="comment">%}
+</span>
+close <span class="string">all</span>;
+clear <span class="string">all</span>;
+clc;
+</pre><h2 id="2">Deklarationen</h2><pre class="codeinput">syms <span class="string">t</span>;          <span class="keyword">...</span><span class="comment">Zeit</span>
+syms <span class="string">A_1</span> <span class="string">A_2</span><span class="keyword">...</span><span class="comment">  ...Amplitude (=1)</span>
+     <span class="string">z_1</span> <span class="string">z_2</span><span class="keyword">...</span><span class="comment">  ...geometrische Wegl&auml;nge</span>
+     <span class="string">w</span><span class="keyword">...</span><span class="comment">        ...Kreisfrequenz</span>
+     <span class="string">k</span><span class="keyword">...</span><span class="comment">        ...Periodit&auml;tszahl</span>
+     <span class="string">wellenlaenge</span><span class="keyword">...</span>
+     <span class="string">c</span><span class="keyword">...</span><span class="comment">        ...Lichtgeschwindigkeit</span>
+     <span class="string">TV</span><span class="keyword">...</span><span class="comment">       ...Tranmissionsverm&ouml;gen</span>
+     <span class="string">s</span><span class="keyword">...</span><span class="comment">        ...Probenlaenge</span>
+     <span class="string">n</span>;          <span class="keyword">...</span><span class="comment">Brechungsindex</span>
+</pre><h2 id="3">Definitionen</h2><pre class="codeinput">    c = 299792458;
+    wellenlaenge = 450*10^(-9);
+    k = 2*pi/wellenlaenge;
+    R = 0.5;
+    TV = 0.5;
+    w = c*k;
+    z_1 = 1;
+    z_2 = 1.34;
+    A_1 = 1;
+    A_2 = 1;
+    T = wellenlaenge/c;
+    s = 0.02;
+    phi(n) = s*(n-1)*2*pi/wellenlaenge;
+</pre><h2 id="4">Wellenfunktionen</h2><pre class="codeinput">    <span class="comment">%%Detektor 1</span>
+    E_1(t,n) = R^2*exp(1i*(phi(n)+3*pi+k*z_1+w*t))+ R^2*exp(-1i*(phi(n)+3*pi+k*z_1+w*t))+<span class="keyword">...</span>
+                TV^2*exp(1i*(1*pi+k*z_2+w*t))+TV^2*exp(-1i*(1*pi+k*z_2+w*t));
+    <span class="comment">%Detektor 2</span>
+    E_2(t,n) = R*TV*exp(1i*(2*pi+phi(n)+k*z_1+w*t))+R*TV*exp(-1i*(2*pi+phi(n)+k*z_1+w*t))+<span class="keyword">...</span>
+    R*TV*exp(1i*(2*pi+k*z_2+w*t))+R*TV*exp(-1i*(2*pi+k*z_2+w*t));
+</pre><h2 id="5">Intensit&auml;ten</h2><pre class="codeinput">    I_1(t,n) = E_1(t,n)^2;         <span class="keyword">...</span><span class="comment"> zeitliche Intensit&auml;t</span>
+    I_2(t,n) = E_2(t,n)^2;         <span class="keyword">...</span><span class="comment"> zeitliche Intensit&auml;t</span>
+    I_mw_1(n) = int(I_1(t,n),0,T); <span class="keyword">...</span><span class="comment"> mittlere  Intensit&auml;t</span>
+    I_mw_2(n) = int(I_2(t,n),0,T); <span class="keyword">...</span><span class="comment"> mittlere  Intensit&auml;t</span>
+</pre><h2 id="6">Plotten der Intensit&auml;t f&uuml;r unterschiedliche n</h2><pre class="codeinput">    x = [1.4:0.000001:1.40005];
+    plot(x,I_mw_1(x),x,I_mw_2(x));
+    legend(<span class="string">'Detektor 1'</span>,<span class="string">'Detektor 1'</span>,<span class="string">'Location'</span>,<span class="string">'NorthEastOutside'</span>);
+    xlabel(<span class="string">'Brechungsindex n'</span>);
+    ylabel(<span class="string">'relative Intensit&auml;t'</span>);
+</pre><pre class="codeoutput">Warning: Imaginary parts of complex X and/or Y arguments ignored 
+</pre><img vspace="5" hspace="5" src="MachZehnder_01.png" alt=""> <h2 id="7">Plotten der EM-Wellen</h2><pre>  x = [0:T*0.005:T*2];
+  plot(x,E_2(x,1),x,E_1(x,1));</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2019b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%{
+    Nikita Vetter - MachZehnder Interferometer (Modell)
+%}
+
+close all;
+clear all;
+clc; 
+%% Deklarationen
+syms t;          ...Zeit
+syms A_1 A_2...  ...Amplitude (=1)
+     z_1 z_2...  ...geometrische Weglänge
+     w...        ...Kreisfrequenz
+     k...        ...Perioditätszahl
+     wellenlaenge...
+     c...        ...Lichtgeschwindigkeit
+     TV...       ...Tranmissionsvermögen
+     s...        ...Probenlaenge
+     n;          ...Brechungsindex
+%% Definitionen
+    c = 299792458; 
+    wellenlaenge = 450*10^(-9); 
+    k = 2*pi/wellenlaenge;
+    R = 0.5; 
+    TV = 0.5;
+    w = c*k;
+    z_1 = 1; 
+    z_2 = 1.34;
+    A_1 = 1; 
+    A_2 = 1; 
+    T = wellenlaenge/c;     
+    s = 0.02;
+    phi(n) = s*(n-1)*2*pi/wellenlaenge;
+%% Wellenfunktionen    
+    %%Detektor 1
+    E_1(t,n) = R^2*exp(1i*(phi(n)+3*pi+k*z_1+w*t))+ R^2*exp(-1i*(phi(n)+3*pi+k*z_1+w*t))+...
+                TV^2*exp(1i*(1*pi+k*z_2+w*t))+TV^2*exp(-1i*(1*pi+k*z_2+w*t));
+    %Detektor 2
+    E_2(t,n) = R*TV*exp(1i*(2*pi+phi(n)+k*z_1+w*t))+R*TV*exp(-1i*(2*pi+phi(n)+k*z_1+w*t))+...
+    R*TV*exp(1i*(2*pi+k*z_2+w*t))+R*TV*exp(-1i*(2*pi+k*z_2+w*t));
+%% Intensitäten
+    I_1(t,n) = E_1(t,n)^2;         ... zeitliche Intensität 
+    I_2(t,n) = E_2(t,n)^2;         ... zeitliche Intensität 
+    I_mw_1(n) = int(I_1(t,n),0,T); ... mittlere  Intensität   
+    I_mw_2(n) = int(I_2(t,n),0,T); ... mittlere  Intensität
+%% Plotten der Intensität für unterschiedliche n
+    x = [1.4:0.000001:1.40005];
+    plot(x,I_mw_1(x),x,I_mw_2(x));
+    legend('Detektor 1','Detektor 1','Location','NorthEastOutside');
+    xlabel('Brechungsindex n');
+    ylabel('relative Intensität');
+%% Plotten der EM-Wellen
+%    x = [0:T*0.005:T*2];
+%    plot(x,E_2(x,1),x,E_1(x,1));
+##### SOURCE END #####
+--></body></html>
