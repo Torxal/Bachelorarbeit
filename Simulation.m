@@ -16,7 +16,6 @@ syms t R T A_0 k kreisfrequenz l_mp l_op l_d l_p n_Ende n_Anfang zeitdauer poly_
 
 %% !!!!!!!!!!!! Hautpfunktionen !!!!!!!!!!!!!!!!!
 z_mp(t) = l_d-2*l_p+2*l_mp+2*l_p*((n_Ende-n_Anfang)*poly_zeit*t+n_Anfang); ... Lineare Funktion für zeitabhängigen Brechungsindex
-%z_mp(t) = k*(2*l_op+l_d);
 E_op(t) = sqrt(R*T)*A_0*(exp(1i*(k*(2*l_op+l_d)+kreisfrequenz*t))+exp(-1i*(k*(2*l_op+l_d)+kreisfrequenz*t))); ... ohne Probe
 E_mp(t) = sqrt(R*T)*A_0*(exp(1i*(k*z_mp(t)+kreisfrequenz*t))+exp(-1i*(k*z_mp(t)+kreisfrequenz*t)));
 Intensitaet(t) = simplify((E_op(t)+E_mp(t))^2); 
@@ -71,7 +70,7 @@ n_Ende    = 1.4;      ... Endbrechungsindex   (t=zeitdauer)
 
 Frage = input('Bitte wähle (1) für zeitliche Mittelwertbildung und (2) für brechungsindex bestimmte Mittelwertbildung','s');
 
-if (Frage == '1')
+
 %% ======== zeitliche Mittelwertbildung =========
 
 syms a b; ... unbestimmte Integralgrenzen a(oben) b(unten)
@@ -82,9 +81,12 @@ Mittelwerte_bestimmt = double(Mittelwert_unbestimmt(Zeitwerte,Zeitwerte+1/Messfr
 x = 1:1:100
 plot(Mittelwerte_bestimmt)  
 
-elseif(Frage == '2')
-%% == Mittelwertbildung mittels Brechungsindex ==
+%% Zusatz Plotten der EM-Welle 
+%t = [0:T*0.005:T*1];
+%plot(t,E_1(t),t,E_2(t),t,E_ges(t));
+%legend('E_1','E_2','E_ges','Location','NorthEastOutside')
+%plot(t,I(t));
+%int(I,t,T);
 
-end
 
 
