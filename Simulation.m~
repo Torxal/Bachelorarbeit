@@ -1,0 +1,118 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   Nikita Vetter
+%   Bachelorarbeit
+%   Simulation des MZ-Interferometer
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Löschen des Speichers
+clear all;
+close all;
+clc; 
+
+%% Festlegen der Variablen
+syms t; 
+syms R T A_0 k kreisfrequenz l_mp l_op l_d l_p;
+syms n_Ende n_Anfang zeitdauer poly_zeit;
+
+%% !!!!!!!!!!!! Hautpfunktionen !!!!!!!!!!!!!!!!!
+z_mp(t) = l_d-2*l_p+2*l_mp+2*l_p*((n_Ende-n_Anfang)*poly_zeit*t+n_Anfang); ... Lineare Funktion für zeitabhängigen Brechungsindex
+E_op(t) = sqrt(R*T)*A_0*(exp(1i*(k*(2*l_op+l_d)+kreisfrequenz*t))+exp(-1i*(k*(2*l_op+l_d)+kreisfrequenz*t))); ... ohne Probe
+E_mp(t) = sqrt(R*T)*A_0*(exp(1i*(k*z_mp(t)+kreisfrequenz*t))+exp(-1i*(k*z_mp(t)+kreisfrequenz*t)));
+Intensitaet(t) = simplify((E_op(t)+E_mp(t))^2); 
+
+%I_mw(a,b) = int(Intens,t,a,b); ... Mittelwert 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ========= Parameter Strahlengang =============
+
+%% Strahlenweg ohne Probe (Von BS zu 
+l_op = 0.1; ... Länge Strahlengang [m]
+
+%% Strahlengang mit Probe 
+l_mp = 0.1;  ... Länge Strahlengang [m]
+l_p  = 0.01; ... Probenlänge [m]
+
+%% Strahlengang Detektor 
+l_d  = 0.05; ... Länge Strahlengang
+
+%% Strahlteiler 
+R = 0.5; ... Reflexionsanteil
+T = 0.5; ... Translationsanteil 
+
+%% ============== Lichtquelle ===================
+wellenlaenge = (605*10^(-9));  ... Wellenlänge des Laser [nm]
+c = 299792458;                 ... Lichtgeschwindigkeit [m/s]
+A_0 = 1;                       ... Amplitude
+
+%% ========= Physikalische Beziehungen ==========
+k = 2*pi/wellenlaenge;              ... Perioditätszahl
+kreisfrequenz = 2*pi*c/wellenlaenge;... reisfrequenz
+frequenz = c/wellenlaenge;          ... Frequenz
+periodendauer = 1/frequenz;         ... Periodendauer
+
+
+%% ========== Polymerisationsparameter ==========
+poly_zeit = 10;       ... Dauer für Polymerisationzeit
+n_Anfang  = 1.2;      ... Startbrechungsindex (t=0)             
+n_Ende    = 1.4;      ... Endbrechungsindex   (t=zeitdauer)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% ========= Mittelwertbildung ==================
+syms a b; ... unbestimmte Integralgrenzen a(oben) b(unten)
+Mittelwert_unbestimmt(a,b) = 1/(b-a)*simplify(eval(int(Intensitaet(t),t,a,b))); ... unbestimmtes Integral
+C 
+
+
+%% XXXXXXXXX Plot der Welle ohne Probe XXXXXXXXXX
+% Auskommentiert
+% C= 0:(1*10^(-16)):(1*10^(-14))
+% plot(C,eval(E_op(C)))
+% C= 0:(1*10^(-16)):(1*10^(-14))
+% plot(C,eval(E_mp(C)))
+
+
+
+... Dauer für Polymerisation
+% %% Elektromagnetische Welle
+% schritt   = 0.4*10^(-16);                        ... Mittelungszeiten
+% zeitdauer = 1*10^(-14);                         ... Maximale Messzeit    
+% anzahl_messwerte = int32(zeitdauer/schritt+1); ... Anzahl aller Messwerte
+% I_werte      = zeros(anzahl_messwerte,1);         ... Initialisierung Mittelwerte
+% 
+% I(t)    = simplify((eval(E_op(t)+E_mp(t)))^2); ... Intensität der elektromagnetischen Welle
+% 
+% %% Plot der Intensität
+% syms iy;
+% Ie(t) = eval(I(t));
+% %Funktionswerte für unterschiedliche Zeitpunkte eintragen
+% for iy=1:1:anzahl_messwerte
+%    I_werte(iy) = double(Ie(schritt*(double(iy-1))));
+% end
+% plot_points = 0:schritt:zeitdauer;
+% plot(plot_points,I_werte);
+% 
+% a = 0; 
+% b = 1; 
+% A = double(eval(1/(b-a)*int(Intens,t,a,b)));
+% 
+% % 1 Mhz
+% 
+% Messfrequenz = 1000000;
+% Data = ones(poly_zeit*Messfrequenz,1);
+% for j=1:1:poly_zeit*Messfrequenz
+%     
+%     Data(j) = double(eval(1/(b-a)*int(Intens,t,j/(Messfrequenz),j/)));
+% end
+
+%% Mittelwert (Integral bilden)
+%% Mittelung 
+
+%syms y
+%for y=0:Schritt:zeitdauer
+%    I_mw(int32(y/Schritt+1)) = simplify(int(I(t),t,y,y+Schritt));
+%end
+
