@@ -6,7 +6,7 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% Löschen des Speichers
+%% LÃ¶schen des Speichers
 clear all;
 close all;
 clc; 
@@ -15,7 +15,7 @@ clc;
 syms t R T A_0 k kreisfrequenz l_mp l_op l_d l_p n_Ende n_Anfang zeitdauer poly_zeit;
 
 %% !!!!!!!!!!!! Hautpfunktionen !!!!!!!!!!!!!!!!!
-z_mp(t) = l_d-2*l_p+2*l_mp+2*l_p*((n_Ende-n_Anfang)*poly_zeit*t+n_Anfang); ... Lineare Funktion für zeitabhängigen Brechungsindex
+z_mp(t) = l_d-2*l_p+2*l_mp+2*l_p*((n_Ende-n_Anfang)*poly_zeit*t+n_Anfang); ... Lineare Funktion fÃ¼r zeitabhÃ¤ngigen Brechungsindex
 E_op(t) = sqrt(R*T)*A_0*(exp(1i*(k*(2*l_op+l_d)+kreisfrequenz*t))+exp(-1i*(k*(2*l_op+l_d)+kreisfrequenz*t))); ... ohne Probe
 E_mp(t) = sqrt(R*T)*A_0*(exp(1i*(k*z_mp(t)+kreisfrequenz*t))+exp(-1i*(k*z_mp(t)+kreisfrequenz*t)));
 Intensitaet(t) = simplify((E_op(t)+E_mp(t))^2); 
@@ -27,33 +27,33 @@ Intensitaet(t) = simplify((E_op(t)+E_mp(t))^2);
 %% ========= Parameter Strahlengang =============
 
 %% Strahlenweg ohne Probe (Von BS zu 
-l_op = 0.1; ... Länge Strahlengang [m]
+l_op = 0.1; ... LÃ¤nge Strahlengang [m]
 
 %% Strahlengang mit Probe 
-l_mp = 0.1;  ... Länge Strahlengang [m]
-l_p  = 0.01; ... Probenlänge [m]
+l_mp = 0.1;  ... LÃ¤nge Strahlengang [m]
+l_p  = 0.01; ... ProbenlÃ¤nge [m]
 
 %% Strahlengang Detektor 
-l_d  = 0.05; ... Länge Strahlengang
+l_d  = 0.05; ... LÃ¤nge Strahlengang
 
 %% Strahlteiler 
 R = 0.5; ... Reflexionsanteil
 T = 0.5; ... Translationsanteil 
 
 %% ============== Lichtquelle ===================
-wellenlaenge = (605*10^(-9));  ... Wellenlänge des Laser [nm]
+wellenlaenge = (605*10^(-9));  ... WellenlÃ¤nge des Laser [nm]
 c = 299792458;                 ... Lichtgeschwindigkeit [m/s]
 A_0 = 1;                       ... Amplitude
 
 %% ========= Physikalische Beziehungen ==========
-k = 2*pi/wellenlaenge;              ... Perioditätszahl
+k = 2*pi/wellenlaenge;              ... PerioditÃ¤tszahl
 kreisfrequenz = 2*pi*c/wellenlaenge;... reisfrequenz
 frequenz = c/wellenlaenge;          ... Frequenz
 periodendauer = 1/frequenz;         ... Periodendauer
 
 
 %% ========== Polymerisationsparameter ==========
-poly_zeit = 10;       ... Dauer für Polymerisationzeit
+poly_zeit = 10;       ... Dauer fÃ¼r Polymerisationzeit
 n_Anfang  = 1.2;      ... Startbrechungsindex (t=0)             
 n_Ende    = 1.4;      ... Endbrechungsindex   (t=zeitdauer)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -68,7 +68,7 @@ n_Ende    = 1.4;      ... Endbrechungsindex   (t=zeitdauer)
 %C= (9500000000*10^(-14)):(1*10^(-17)):(9500000000.4*10^(-14))
 %plot(C,eval(((E_mp(C)+E_op(C)))),C,eval(E_mp(C)),C,eval(E_op(C)))
 
-Frage = input('Bitte wähle (1) für zeitliche Mittelwertbildung und (2) für brechungsindex bestimmte Mittelwertbildung','s');
+%Frage = input('Bitte wÃ¤hle (1) fÃ¼r zeitliche Mittelwertbildung und (2) fÃ¼r brechungsindex bestimmte Mittelwertbildung','s');
 
 
 %% ======== zeitliche Mittelwertbildung =========
